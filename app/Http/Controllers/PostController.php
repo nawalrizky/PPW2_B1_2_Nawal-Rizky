@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Post; //Import model
+
 //return type View
 use Illuminate\View\View;
 
@@ -23,10 +25,10 @@ class PostController extends Controller
     public function index(): View
     {
         //get posts
-        Post::latest()->paginate(5);
+        $posts = Post::latest()->paginate(5); //Tambah variabel
 
         //render view with posts
-        return view('index', compact('posts'));
+        return view('posts.index', compact('posts')); //Ubah index jadi posts.index
     }
 
     /**
@@ -45,7 +47,7 @@ class PostController extends Controller
      * @param  mixed $request
      * @return RedirectResponse
      */
-    public function store($request): RedirectResponse
+    public function store(Request $request): RedirectResponse //Tambah Request
     {
         //validate form
         $this->validate($request, [
@@ -157,7 +159,7 @@ class PostController extends Controller
     public function destroy($post): RedirectResponse
     {
         //get post by ID
-        $post = Post::findOrFail();
+        $post = Post::findOrFail($post); //Tambah parameter
 
         //delete image
         Storage::delete('public/posts/'. $post->image);
